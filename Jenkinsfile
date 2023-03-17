@@ -1,17 +1,30 @@
-node {
-   stage('Get Source') {
-      // copy source code from local file system and test
-      // for a Dockerfile to build the Docker image
-      git ('https://github.com/AniketKharpatil/flask-app')
-      if (!fileExists("Dockerfile")) {
-         error('Dockerfile missing.')
+pipeline {
+  agent any
+  
+  stages {
+    stage('Build Docker Image') {
+      steps {
+        script {
+          docker.build("weather-app:${env.BUILD_ID}", "-f Dockerfile .")
+        }
       }
-   }
-   stage('Build Docker') {
-       // build the docker image from the source code using the BUILD_ID parameter in image name
-         sh "sudo docker build -t weather-app ."
-   }
-   stage("run docker container"){
-        sh "sudo docker run -d -p 8000:8000 weather-app"
     }
+    
+    stage('Run Docker Container') {
+      steps {
+        script {
+          docker.run("weather-app:${env.BUILD_ID}", "-p 5000:5000")
+        }
+      }
+    }
+  }
+  
+  post {
+    always {
+      script {
+        docker.stop("weather-app:${env.BUILD_ID}")
+        docker.removeImage("weather-app:${env.BUILD_ID}")
+      }
+    }
+  }
 }

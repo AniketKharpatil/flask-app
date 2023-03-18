@@ -5,7 +5,7 @@ app = Flask(__name__)
   
 @app.route('/', methods =['GET'])
 def home():
-    cityname="Mumabi"
+    cityname="London"
     construct_url = "https://api.openweathermap.org/data/2.5/weather?q=Mumbai&appid=" + "e93233fa1e5437258961a16031815195"
     response = requests.get(construct_url)
 

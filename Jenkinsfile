@@ -19,9 +19,7 @@ pipeline {
   
   post {
     always {
-      script {
-        docker.stop("weather-app")
-      }
+      sh 'echo "Running on port 5000" '
     }
   }
 }

@@ -5,14 +5,16 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         script {
-          docker.build("weather-app:", "-f Dockerfile .")
+          docker.build("weather-app:${env.BUILD_ID}", "-f Dockerfile .")
         }
       }
     }
     
     stage('Run Docker Container') {
       steps {
-        sh 'docker run -d -p 5000:5000 my-weather-app'
+        script {
+          docker.run("weather-app:${env.BUILD_ID}", "-d -p 5000:5000")
+        }
       }
     }
   }
@@ -20,8 +22,8 @@ pipeline {
   post {
     always {
       script {
-        docker.stop("weather-app")
-        docker.removeImage("weather-app")
+        docker.stop("weather-app:${env.BUILD_ID}")
+        docker.removeImage("weather-app:${env.BUILD_ID}")
       }
     }
   }

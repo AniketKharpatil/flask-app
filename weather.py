@@ -6,7 +6,7 @@ app = Flask(__name__)
 @app.route('/', methods =['GET'])
 def home():
     cityname="London"
-    construct_url = "https://api.openweathermap.org/data/2.5/weather?q=India&appid=" + "e93233fa1e5437258961a16031815195"
+    construct_url = "https://api.openweathermap.org/data/2.5/weather?q=China&appid=" + "e93233fa1e5437258961a16031815195"
     response = requests.get(construct_url)
 
     list_of_data = response.json()
